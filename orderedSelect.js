@@ -12,11 +12,10 @@
  * </script>
  */
 (function($) {
-  $.fn.orderedSelect = function() {
+  $.fn.orderedSelect = function(options) {
     $(this).each(function(){
       var selectBox = $(this);
-      var displayArea = $('#' + $(this).data('display-area-id'));
-      var orderedSelect = new OrderedSelect(selectBox, displayArea);
+      var orderedSelect = new OrderedSelect(selectBox, options || {});
     });
   };
 
@@ -31,19 +30,22 @@
     }
   }
 
-  function OrderedSelect(selectBox, displayArea) {
+  function OrderedSelect(selectBox, options) {
+    var displayArea = options.displayArea || $('#' + selectBox.attr('data-display-area-id'));
+    var initial = options.initial || [];
+    var name = options.name;
+    var selectedArray = [];
     var orderedSelect = this;
-    var selectedPosition = 0;
     var state = buildInitialState(selectBox);
     var lookup = buildLookup(state);
-    var selectedArray = [];
 
-    this.selectBox = selectBox;
-    this.displayArea = displayArea;
-    
-    selectBox.data('orderedSelect', this);
-    initSelectBox(selectBox);
-    initDisplayArea(displayArea);
+    var generateItemText = options.generateItemText || function(entry, index) {
+      return (index + 1) + '. ' + entry.text;
+    }
+
+    var generateHiddenInput = options.generateHiddenInput || function(entry, index) {
+      return '<input type="hidden" name="' + name + '[' + index + ']" value="' + entry.value + '" />';
+    }
 
     this.addSelection = function(value) {
       var entry = lookup[value];
@@ -59,6 +61,13 @@
       removeFromArray(selectedArray, findSelectedPosition(entry));
     };
 
+    selectBox.data('orderedSelect', this);
+    initSelectBox(selectBox);
+    initDisplayArea(displayArea);
+    selectAll(initial);
+    selectBox.rebuild();
+    displayArea.rebuild();
+
     function findSelectedPosition(entry) {
       for (var i = 0; i < selectedArray.length; i++) {
         if (entry === selectedArray[i]) {
@@ -66,10 +75,6 @@
         }
       }
       return -1;
-    }
-
-    this.debugSelectedArray = function() {
-      console.log(selectedArray);
     }
 
     /**
@@ -83,6 +88,7 @@
         newSelectedArray[i] = $(selected[i]).data('osEntry');
       }
       selectedArray = newSelectedArray;
+      displayArea.rebuild();
     }
 
     function buildInitialState(selectBox) {
@@ -139,8 +145,7 @@
 
         for (var i = 0; i < selectedArray.length; i++) {
           var entry = selectedArray[i];
-          var displayHtml = $('<li class="osDisplayNode">' + entry.text + '</li>');
-          displayHtml.data('osEntry', entry);
+          var displayHtml = $('<li class="osDisplayNode">' + generateItemText(entry, i) + '</li>');
           var removeTrigger = $('<a class="osRemove" href="#">&times</a>');
 
           var onclick = (function(value) { 
@@ -154,12 +159,20 @@
 
           removeTrigger.click(onclick);
           displayHtml.append(removeTrigger);
+          displayHtml.append($(generateHiddenInput(entry, i)));
+          displayHtml.data('osEntry', entry);
           ol.append(displayHtml);
         }
 
         displayArea.append(ol);
         ol.sortable();
         ol.bind('sortstop', function() { syncDisplayState(); });
+      }
+    }
+
+    function selectAll(selectValues) {
+      for (var i = 0; i < selectValues.length; i++) {
+        orderedSelect.addSelection(selectValues[i]);
       }
     }
 
