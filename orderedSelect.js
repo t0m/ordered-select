@@ -148,6 +148,7 @@
               orderedSelect.removeSelection(value); 
               displayArea.rebuild();
               selectBox.rebuild();
+              return false;
             };
           })(entry.value);
 
