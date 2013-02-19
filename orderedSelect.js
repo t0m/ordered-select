@@ -8,7 +8,7 @@
  * <select id="mySelectBox" style="width:300px" data-display-area-id="displayArea"></select>
  * 
  * <script>
- * $('#mySelectBox').orderedSelect();
+ * $('#mySelectBox').orderedSelect({ name : 'myParameterToSubmit' });
  * </script>
  */
 (function($) {
@@ -43,6 +43,7 @@
       return (index + 1) + '. ' + entry.text;
     }
 
+    // The default generator makes a hidden input with the index following in brackets like "myParameter[0]"
     var generateHiddenInput = options.generateHiddenInput || function(entry, index) {
       return '<input type="hidden" name="' + name + '[' + index + ']" value="' + entry.value + '" />';
     }
@@ -64,10 +65,17 @@
     selectBox.data('orderedSelect', this);
     initSelectBox(selectBox);
     initDisplayArea(displayArea);
-    selectAll(initial);
-    selectBox.rebuild();
-    displayArea.rebuild();
 
+    if (initial.length > 0) {
+      selectAll(initial);
+      selectBox.rebuild();
+      displayArea.rebuild();
+    }
+
+    /**
+     * Return the index of the given entry in the selected array in linear time.
+     * TODO: If there's a lot of selections it may be worth using a lookup table 
+     */
     function findSelectedPosition(entry) {
       for (var i = 0; i < selectedArray.length; i++) {
         if (entry === selectedArray[i]) {
@@ -91,6 +99,10 @@
       displayArea.rebuild();
     }
 
+    /**
+     * Builds an array of OrderedEntry objects that represents the state of the
+     * select box.
+     */
     function buildInitialState(selectBox) {
       var options = selectBox.find('option');
       var state = new Array(options.length);
@@ -100,6 +112,10 @@
       return state;
     }
 
+    /**
+     * Lookup object for finding an OrderedEntry object based on its value in
+     * constant time.
+     */
     function buildLookup(state) {
       var lookup = {};
       for (var i = 0; i < state.length; i++) {
@@ -108,6 +124,9 @@
       return lookup;
     }
 
+    /**
+     * Bind the rebuild and clearSelection methods for the selectBox
+     */
     function initSelectBox(selectBox) {
       var options = selectBox.find('option');
 
@@ -138,6 +157,9 @@
       });
     }
 
+    /**
+     * Bind the rebuild method for the displayArea
+     */
     function initDisplayArea(displayArea) {
       displayArea.rebuild = function() {
         $(this).html('');
@@ -170,6 +192,10 @@
       }
     }
 
+    /**
+     * Select an array of values (values must correspond the value attribute 
+     * of an option within the select box)
+     */
     function selectAll(selectValues) {
       for (var i = 0; i < selectValues.length; i++) {
         orderedSelect.addSelection(selectValues[i]);
