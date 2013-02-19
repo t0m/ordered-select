@@ -1,14 +1,22 @@
 "use strict";
 /**
- * Widget for adding items selected from a single select box to an ordered list.
- * The widget uses a regular single select box and a display area div for 
- * showing the selected results. 
+ * Plug in for adding and rearranging items selected from a single select box 
+ * to an ordered list. Options are removed as they are selected so the same
+ * option cannot be selected more than once. An example use case would be to 
+ * quickly add a list of states for a road trip. Designed to work well with
+ * the select2 plugin from http://ivaynberg.github.com/select2/
+ *
+ * Requires JQuery and JQuery UI with the draggable and 
+ * sortable modules. 
  * 
  * <div id="displayArea"></div>
- * <select id="mySelectBox" style="width:300px" data-display-area-id="displayArea"></select>
+ * <select id="states" style="width:300px" data-display-area-id="displayArea">
+ *   <!-- options for all the states -->
+ * </select>
  * 
  * <script>
- * $('#mySelectBox').orderedSelect({ name : 'myParameterToSubmit' });
+ *   var alreadySelected = ['VT', 'MA', 'CT', 'NY', 'DC'];
+ *   $('#states').orderedSelect({ name : 'roadTripStates', intitial : alreadySelected });
  * </script>
  */
 (function($) {
