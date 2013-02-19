@@ -1,10 +1,12 @@
 /* ordered select styles */
 .osWrapper {
   list-style:none;
-  margin-left:0px;
+  padding-left:0px;
 }
 .osDisplayNode {
   position:relative;
+  background-color:white;
+  cursor: move;
   border:1px solid #ccc;
   border-radius:3px;
   padding:3px;
