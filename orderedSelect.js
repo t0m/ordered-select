@@ -1,4 +1,3 @@
-"use strict";
 /**
  * Plug in for adding and rearranging items selected from a single select box 
  * to an ordered list. Options are removed as they are selected so the same
@@ -19,7 +18,8 @@
  *   $('#states').orderedSelect({ name : 'roadTripStates', intitial : alreadySelected });
  * </script>
  */
-(function($) {
+(function ($) {
+  "use strict";
   $.fn.orderedSelect = function(options) {
     $(this).each(function(){
       var selectBox = $(this);
@@ -35,7 +35,7 @@
 
     this.optionHtml = function() {
       return '<option value="' + this.value + '">' + this.text + '</option>';
-    }
+    };
   }
 
   function OrderedSelect(selectBox, options) {
@@ -49,19 +49,19 @@
 
     var generateItemText = options.generateItemText || function(entry, index) {
       return (index + 1) + '. ' + entry.text;
-    }
+    };
 
     // The default generator makes a hidden input with the index following in brackets like "myParameter[0]"
     var generateHiddenInput = options.generateHiddenInput || function(entry, index) {
       return '<input type="hidden" name="' + name + '[' + index + ']" value="' + entry.value + '" />';
-    }
+    };
 
     this.addSelection = function(value) {
       var entry = lookup[value];
       entry.selected = true;
       entry.visible = false;
       selectedArray.push(entry);
-    }
+    };
 
     this.removeSelection = function(value) {
       var entry = lookup[value];
@@ -100,6 +100,7 @@
     function syncDisplayState() {
       var selected = displayArea.find('li.osDisplayNode');
       var newSelectedArray = new Array(selectedArray.length);
+
       for (var i = 0; i < selected.length; i++) {
         newSelectedArray[i] = $(selected[i]).data('osEntry');
       }
@@ -114,6 +115,7 @@
     function buildInitialState(selectBox) {
       var options = selectBox.find('option');
       var state = new Array(options.length);
+
       for (var i = 0; i < options.length; i++) {
         state[i] = new OrderedEntry($(options[i]).val(), $(options[i]).text());
       }
@@ -126,6 +128,7 @@
      */
     function buildLookup(state) {
       var lookup = {};
+      
       for (var i = 0; i < state.length; i++) {
         lookup[state[i].value] = state[i];
       }
@@ -147,11 +150,11 @@
           }
         }
         selectBox.html(optionHtml);
-      }
+      };
 
       selectBox.clearSelection = function() {
         $(this).find(':selected').removeAttr('selected');
-      }
+      };
 
       selectBox.change(function(data, extra) {
         if (extra && extra.ignore) { 
@@ -197,7 +200,7 @@
         displayArea.append(ol);
         ol.sortable();
         ol.bind('sortstop', function() { syncDisplayState(); });
-      }
+      };
     }
 
     /**
