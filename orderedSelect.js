@@ -52,7 +52,7 @@
     };
 
     // The default generator makes a hidden input with the index following in brackets like "myParameter[0]"
-    var generateHiddenInput = options.generateHiddenInput || function(entry, index) {
+    var generateHiddenInput = options.generateHiddenInput || function(name, entry, index) {
       return '<input type="hidden" name="' + name + '[' + index + ']" value="' + entry.value + '" />';
     };
 
@@ -192,7 +192,7 @@
 
           removeTrigger.click(onclick);
           displayHtml.append(removeTrigger);
-          displayHtml.append($(generateHiddenInput(entry, i)));
+          displayHtml.append($(generateHiddenInput(name, entry, i)));
           displayHtml.data('osEntry', entry);
           ol.append(displayHtml);
         }
