@@ -5,4 +5,36 @@ hidden inputs following whatever naming convention the backend requires
 via drag and drop and the plugin will handle the hidden inputs automatically.
 
 
+![preview image](http://t0m.github.com/ordered-select/screenshot.png)
+
+Given a display area and a selectbox:
+
+```
+<div id="stateDisplayArea"></div>
+<select id="statesToVisitSelect">
+  <!-- collection of state options -->
+</select>
+```
+
+To initialize a ordered list:
+
+```
+$('#statesToVisitSelect').orderedSelect({ name : 'statesToVisit', displayArea : 'stateDisplayArea'});
+```
+
+Alternately, you can give the selectbox a "data-display-area-id" attribute
+pointing to your display area:
+
+```
+<div id="stateDisplayArea"></div>
+<select id="statesToVisitSelect" data-display-area-id="stateDisplayArea">
+  <!-- collection of state options -->
+</select>
+```
+
+And then you'd just have to give a name:
+
+```
+$('#statesToVisitSelect').orderedSelect({ name : 'statesToVisit'});
+```
 
