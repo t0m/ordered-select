@@ -10,7 +10,7 @@ via drag and drop and the plugin will handle the hidden inputs automatically.
 
 ![preview image](http://t0m.github.com/ordered-select/screenshot.png)
 
-Starting:
+Getting Started
 ------------------------------
 
 Given a display area div and a selectbox:
@@ -46,7 +46,7 @@ And then you'd just have to give a name:
 $('#statesToVisitSelect').orderedSelect({ name : 'statesToVisit'});
 ```
 
-Prepopulating:
+Prepopulating
 ------------------------------
 
 To prepopulate the widget with data, use the "initial" option with an array
@@ -57,7 +57,7 @@ the corresponding option text:
 $('#statesToVisitSelect').orderedSelect({ name : 'statesToVisit', initial : ['CT', 'NY', 'DC']});
 ```
 
-Formatting the submitted values
+Modifying the hidden inputs
 -------------------------------------
 
 The default name formatter will take the name you pass in and create hidden 
