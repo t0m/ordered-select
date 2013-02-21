@@ -1,3 +1,6 @@
+Ordered Select
+==============================
+
 A simple jquery plugin for handling web input backed by an ordered collection. 
 It takes input from the user via a selectbox and submits data via an array of 
 hidden inputs following whatever naming convention the backend requires 
@@ -6,6 +9,9 @@ via drag and drop and the plugin will handle the hidden inputs automatically.
 
 
 ![preview image](http://t0m.github.com/ordered-select/screenshot.png)
+
+Starting:
+------------------------------
 
 Given a display area div and a selectbox:
 
@@ -39,8 +45,10 @@ And then you'd just have to give a name:
 ```
 $('#statesToVisitSelect').orderedSelect({ name : 'statesToVisit'});
 ```
-  
-  
+
+Prepopulating:
+------------------------------
+
 To prepopulate the widget with data, use the "initial" option with an array
 of option values from the selectbox. The text to display will be pulled from 
 the corresponding option text:
@@ -48,6 +56,9 @@ the corresponding option text:
 ```
 $('#statesToVisitSelect').orderedSelect({ name : 'statesToVisit', initial : ['CT', 'NY', 'DC']});
 ```
+
+Formatting the submitted values
+-------------------------------------
 
 The default name formatter will take the name you pass in and create hidden 
 inputs with the index number in brackets like so:
@@ -59,13 +70,11 @@ inputs with the index number in brackets like so:
 ```
 
 In order to modify this you can specify your own "generateHiddenInput" function.
-For example, to submit a rails-style hash where the key is the array index you 
-would use:
+For example, to submit a rails-style array parameter with empty brackets:
 
 ```
 var generateRailsHiddenInput = function(name, entry, index) {
-  var railsStyleName = name + '[' + index + ']';
-  return '<input type="hidden" name="' + railsStyleName + '" value="' + entry.value + '"/>';
+  return '<input type="hidden" name="' + name + '[]" value="' + entry.value + '"/>';
 }
 
 $('#statesToVisitSelect').orderedSelect({ 
